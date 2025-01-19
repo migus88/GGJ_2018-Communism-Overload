@@ -1,0 +1,128 @@
+{
+  "Language": "English",
+  "Categories": [
+    {
+      "Name": "Global",
+      "Texts": [
+        {
+          "Key": "PressKeyToSkip",
+          "Value": "Press '{0}' to skip..."
+        }
+      ]
+    },
+    {
+      "Name": "Menu",
+      "Texts": [
+        {
+          "Key": "Start",
+          "Value": "START!"
+        },
+        {
+          "Key": "Credits",
+          "Value": "CREDITS"
+        },
+        {
+          "Key": "Exit",
+          "Value": "EXIT"
+        }
+      ]
+    },
+    {
+      "Name": "Credits",
+      "Texts": [
+        {
+          "Key": "Credits",
+          "Value": "Credits"
+        },
+        {
+          "Key": "Yura",
+          "Value": "Yura Sokolov"
+        },
+        {
+          "Key": "Raspik",
+          "Value": "Roman Chukhvanov"
+        },
+        {
+          "Key": "Evjik",
+          "Value": "Evgeniy Shumskiy"
+        },
+        {
+          "Key": "YuraNotes",
+          "Value": "- Lead Programmer \r\n- Story \r\n- Mechanics \r\n- Rigging \r\n- Animations"
+        },
+        {
+          "Key": "RaspikNotes",
+          "Value": "- Programmer \r\n- Story \r\n- Mechanics"
+        },
+        {
+          "Key": "EvjikNotes",
+          "Value": "- Art \r\n- Story \r\n- Animation advisor"
+        },
+        {
+          "Key": "Music",
+          "Value": "Music"
+        },
+        {
+          "Key": "MusicNotes",
+          "Value": "ALEXANDR ZHELANOV:\r\nhttps://soundcloud.com/alexandr-zhelanov\r\n\r\nCLEYTON KAUFFMAN:\r\nhttp://opengameart.org/users/doppelganger\r\n\r\nUSSR ANTHEM"
+        }
+      ]
+    },
+    {
+      "Name": "Intro",
+      "Texts": [
+        {
+          "Key": "Quote",
+          "Value": "The human being is in the most literal sense a political animal, not merely a gregarious animal, but an animal which can individuate itself only in the midst of society."
+        },
+        {
+          "Key": "Name",
+          "Value": "Karl Marx"
+        },
+        {
+          "Key": "Story",
+          "Value": "...to save the world from unnecessary freedom, two best soviet hackers, Ivan and Mishka, developed a virus. To succeed they needed to upload the virus into NSA's mainframe computer, but in the middle of the transmission one of the field agents spotted them. In order to complete their mission, our heroes decided to continue the upload while they're on the run. But they have to stay close to each other..."
+        }
+      ]
+    },
+    {
+      "Name": "Game",
+      "Texts": [
+        {
+          "Key": "Upload",
+          "Value": "Uploading Communism:"
+        },
+        {
+          "Key": "TimeSpent",
+          "Value": "Time spent: {0}"
+        },
+        {
+          "Key": "Interrupted",
+          "Value": "Transmission interrupted"
+        },
+        {
+          "Key": "PressEnter",
+          "Value": "Press ENTER to start"
+        }
+      ]
+    },
+    {
+      "Name": "Lose",
+      "Texts": [
+        {
+          "Key": "Story",
+          "Value": "Ivan and Mishka got caught by nasty NSA agent in the middle of \"Communism Virus\" transmission. \r\n\r\nThey sentenced to 30 years of works in the Belarussian  potato fields.\r\n\r\n\r\nIs it the end?..."
+        }
+      ]
+    },
+    {
+      "Name": "Win",
+      "Texts": [
+        {
+          "Key": "Story",
+          "Value": "\r\nIvan and Mishka successfully uploaded the \"Communism Virus\" into NSA's mainframe, giving them access to a mind control antennas.\r\n\r\n\r\nUS citizens quickly became communists themselves, leading a revolution to became a 16th republic in the USSR.\r\n\r\n\r\nOnly the people who had their tinfoil hats on, were saved from a mind controlling transmissions...\r\n\r\n\r\n\r\n\r\n\r\n\r\nHa-ha! Who's the idiot now?!"
+        }
+      ]
+    }
+  ]
+}
