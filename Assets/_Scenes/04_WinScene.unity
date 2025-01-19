@@ -314,23 +314,11 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Ivan and Mishka successfully uploaded the "Communism Virus" into NSA''s
-    mainframe, giving them access to a mind control antennas.
-
-
-    US citizens quickly
-    became communists themselves, leading a revolution to became a 16th republic
-    in the USSR.
-
-
-    Only the people who had their tinfoil hats on, were saved
-    from a mind controlling transmissions...
-
-
-
-
-
-    Ha-ha! Who''s the idiot now?!'
+  m_Text: "Ivan and Mishka successfully uploaded the \u201CCommunism Virus\u201D
+    into the NSA\u2019s mainframe, giving them access to mind-control antennas.\n\nU.S.
+    citizens quickly became communists themselves, sparking a revolution to become
+    the 16th republic of the USSR.\n\nOnly those who wore tinfoil hats were saved
+    from the mind-control transmissions\u2026\n\n\n\n\nHa-ha! Who's the idiot now?!"
 --- !u!222 &201888855
 CanvasRenderer:
   m_ObjectHideFlags: 0
