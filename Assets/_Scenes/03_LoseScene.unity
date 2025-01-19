@@ -438,9 +438,9 @@ PrefabInstance:
     - target: {fileID: 114152023866227280, guid: 7381247d097fc474dac365eb0554a502,
         type: 3}
       propertyPath: m_Text
-      value: "Ivan and Mishka got caught by nasty NSA agent in the middle of \"Communism
-        Virus\" transmission. \n\nThey sentenced to 30 years of works in the Belarussian 
-        potato fields.\n\n\nIs it the end?..."
+      value: "Ivan and Mishka were caught by a nasty NSA agent in the middle of their
+        \u201CCommunism Virus\u201D transmission.\n\nThey were sentenced to 30 years
+        of forced labor in the Belarusian potato fields.\n\n\nIs this the end?..."
       objectReference: {fileID: 0}
     - target: {fileID: 114152023866227280, guid: 7381247d097fc474dac365eb0554a502,
         type: 3}
