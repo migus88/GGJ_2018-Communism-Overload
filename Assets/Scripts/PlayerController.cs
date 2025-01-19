@@ -150,6 +150,23 @@ public class PlayerController : BaseBehaviour
     private void Update()
     {
         this.run();
+        
+        if (this._tapQueue.Count >= 2 && !this._isSlipping)
+        {
+            var last = this._tapQueue[this._tapQueue.Count - 2].Key;
+            var diff = 1f - (Time.time - last);
+
+            CurrentSpeed *= diff;
+            //Debug.Log($"Diff = {diff}; CurrentSpeed = {CurrentSpeed}");
+        }
+
+        if (this._startedMoving || this._isSlipping)
+        {
+            if (!this._isSlipping)
+                this._anim.SetBool("IsRunning", true);
+            this._body.velocity = new Vector2(0, this._body.velocity.y);
+            this._body.AddForce(transform.right * CurrentSpeed);
+        }
     }
 
     private void run()
@@ -223,26 +240,6 @@ public class PlayerController : BaseBehaviour
         {
             this._anim.SetBool("IsRunning", false);
         }*/
-    }
-
-    private void FixedUpdate()
-    {
-        if (this._tapQueue.Count >= 2 && !this._isSlipping)
-        {
-            var last = this._tapQueue[this._tapQueue.Count - 2].Key;
-            var diff = 1f - (Time.time - last);
-
-            CurrentSpeed *= diff;
-            //Debug.Log($"Diff = {diff}; CurrentSpeed = {CurrentSpeed}");
-        }
-
-        if (this._startedMoving || this._isSlipping)
-        {
-            if (!this._isSlipping)
-                this._anim.SetBool("IsRunning", true);
-            this._body.velocity = new Vector2(0, this._body.velocity.y);
-            this._body.AddForce(transform.right * CurrentSpeed);
-        }
     }
 
     public void OnPlayerGotUp()
