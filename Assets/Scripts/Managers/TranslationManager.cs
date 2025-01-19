@@ -4,23 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class TranslationManager : MonoBehaviour
+public class TranslationManager
 {
-    public static TranslationManager Instance;
+    public static TranslationManager Instance { get; } = new TranslationManager();
 
-    public TranslationLanguage Language { get; set; }
-
-    // Use this for initialization
-    void Awake()
+    private TranslationManager()
     {
-        if (Instance != null)
-            Destroy(gameObject);
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
         this.loadLanguage();
     }
+
+    public TranslationLanguage Language { get; set; }
 
     public void SetLanguage(string lng)
     {
