@@ -7,24 +7,25 @@ using System;
 
 public class PlayerController : BaseBehaviour
 {
+    private static readonly int IsRunningState = Animator.StringToHash("IsRunning");
+    private static readonly int JumpTrigger = Animator.StringToHash("JumpTrigger");
+
     public float Speed = 0f;
-    public float CurrentSpeed = 0f;
     public float StoppingTrashold = 1f;
     public float JumpingHeight = 0.3f;
-    public float SpeedInc = 5f;
     public float SlippingTime = 1.5f;
     public KeyCode LeftButton = KeyCode.LeftArrow;
     public KeyCode RightButton = KeyCode.RightArrow;
     public KeyCode UpButton = KeyCode.UpArrow;
     public GameObject ShitTrail;
+    
+    [Header("New Movement")]
+    [SerializeField] private float _velocityIncrement = 0.2f;
+    [SerializeField] private float _maxVelocity = 3f;
 
     private DirectionKey _lastKeyPressed;
     private Rigidbody2D _body;
-    private bool _startedMoving = false;
-    private float _lastTap = 0f;
     private bool _isGrounded = true;
-    private float _startingY;
-    private readonly List<KeyValuePair<float, KeyCode>> _tapQueue = new List<KeyValuePair<float, KeyCode>>();
     private bool _canMove = false;
     private Animator _anim;
     private bool _isUntouchable = false;
@@ -41,9 +42,6 @@ public class PlayerController : BaseBehaviour
     {
         this._typeEvents.Add(typeof(GameStatePayload), EventsManager.Instance.Subscribe<GameStatePayload>(this.onGameStatePayload));
         this._body = GetComponent<Rigidbody2D>();
-        this._startingY = this._body.transform.position.y;
-        //TEST
-        //this._canMove = true;
     }
 
     private void onGameStatePayload(GameStatePayload obj)
@@ -56,35 +54,35 @@ public class PlayerController : BaseBehaviour
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-
         if (collider.gameObject.layer == 14) //Shit layer
         {
             Destroy(collider.gameObject);
-            this._isSlipping = true;
-            this._anim.SetBool("IsSliding", true);
-            StartCoroutine(this.slip());
+            _isSlipping = true;
+            _anim.SetBool("IsSliding", true);
+            StartCoroutine(slip());
         }
 
         if (collider.gameObject.layer == 10) //Enemy Layer
         {
-            this.die();
+            die();
         }
 
-        if (this._isUntouchable)
+        if (_isUntouchable)
             return;
 
         if (collider.gameObject.layer == 8 || collider.gameObject.layer == 11) //Player layer and obstacles layer
         {
-            this._isSlipping = false;
-            StopCoroutine("slip");
-            this.stopSlipping();
-            this._body.velocity = new Vector2(0, 0);
-            this._body.isKinematic = true;
-            this._anim.SetTrigger("FallTrigger");
-            this._audio.time = 0;
-            this._audio.Play();
-            this._isUntouchable = true;
-            StartCoroutine(this.convertToTouchable());
+            _isSlipping = false;
+            StopCoroutine(slip());
+            stopSlipping();
+            _body.velocity = new Vector2(0, _body.velocity.y);
+            _currentVelocity = 0;
+            _body.isKinematic = true;
+            _anim.SetTrigger("FallTrigger");
+            _audio.time = 0;
+            _audio.Play();
+            _isUntouchable = true;
+            StartCoroutine(convertToTouchable());
         }
     }
 
@@ -105,7 +103,8 @@ public class PlayerController : BaseBehaviour
 
         if (collision.gameObject.layer == 8 || collision.gameObject.layer == 11) //Player layer and obstacles layer
         {
-            this._body.velocity = new Vector2(0, 0);
+            _currentVelocity = 0;
+            this._body.velocity = new Vector2(0, _body.velocity.y);
             this._body.isKinematic = true;
             this._anim.SetTrigger("FallTrigger");
             this._audio.time = 0;
@@ -117,7 +116,8 @@ public class PlayerController : BaseBehaviour
 
     private IEnumerator slip()
     {
-        CurrentSpeed = Speed * 1.5f;
+        _currentVelocity = _maxVelocity * 1.5f;
+        
         ShitTrail.gameObject.SetActive(true);
         yield return new WaitForSeconds(SlippingTime);
         this.stopSlipping();
@@ -127,7 +127,8 @@ public class PlayerController : BaseBehaviour
     {
         if (ShitTrail != null)
             ShitTrail.gameObject.SetActive(false);
-        CurrentSpeed = Speed;
+
+        _currentVelocity = _maxVelocity;
         this._isSlipping = false;
         this._anim.SetBool("IsSliding", false);
     }
@@ -149,97 +150,74 @@ public class PlayerController : BaseBehaviour
 
     private void Update()
     {
-        this.run();
-        
-        if (this._tapQueue.Count >= 2 && !this._isSlipping)
-        {
-            var last = this._tapQueue[this._tapQueue.Count - 2].Key;
-            var diff = 1f - (Time.time - last);
+        HandleMovementInput();
+        HandleJumpInput();
+    }
 
-            CurrentSpeed *= diff;
-            //Debug.Log($"Diff = {diff}; CurrentSpeed = {CurrentSpeed}");
+    private void FixedUpdate()
+    {
+        if(!_body.isKinematic)
+        {
+            _body.velocity = new Vector2(_currentVelocity, _body.velocity.y);
         }
-
-        if (this._startedMoving || this._isSlipping)
+        
+        if(_isJumping)
         {
-            if (!this._isSlipping)
-                this._anim.SetBool("IsRunning", true);
-            this._body.velocity = new Vector2(0, this._body.velocity.y);
-            this._body.AddForce(transform.right * CurrentSpeed);
+            _isJumping = false;
+            _isGrounded = false;
+            
+            _body.AddForce(transform.up * JumpingHeight, ForceMode2D.Impulse);
+            _anim.SetTrigger(JumpTrigger);
         }
     }
 
-    private void run()
+    private KeyCode _previousKeyPressed;
+    private float _currentVelocity;
+    private float _lastButtonPress;
+    private bool _isJumping;
+
+    private void HandleJumpInput()
     {
-        if (this._isSlipping)
-            return;
-
-        if (!this._canMove || this._body.isKinematic)
+        if (!Input.GetKeyDown(UpButton) || !this._isGrounded)
         {
-            this._anim.SetBool("IsRunning", false);
             return;
         }
-
-        CurrentSpeed = CurrentSpeed < 0 ? 0 : CurrentSpeed;
-
-        //this._isGrounded = this._body.transform.position.y <= this._startingY + 0.02f;
-
-        this._startedMoving = false;
-        this._body.drag = 1f;
-
-        if (Input.GetKeyDown(LeftButton) || Input.GetKeyDown(RightButton))
+        
+        _isJumping = true;
+    }
+    
+    private void HandleMovementInput()
+    {
+        if (_isSlipping)
+            return;
+        
+        if (!_canMove || _body.isKinematic)
         {
-            var currentKey = Input.GetKeyDown(LeftButton) ? LeftButton : RightButton;
-
-            this._tapQueue.Add(new KeyValuePair<float, KeyCode>(Time.time, currentKey));
-
-            KeyValuePair<float, KeyCode>? prev = null;
-
-            if (this._tapQueue.Count >= 2)
-            {
-                prev = this._tapQueue[this._tapQueue.Count - 2];
-            }
-
-            if (prev != null && prev.Value.Value != currentKey)
-            {
-                CurrentSpeed += SpeedInc;
-                CurrentSpeed = CurrentSpeed > Speed ? Speed : CurrentSpeed;
-                this._startedMoving = true;
-            }
-
-
-            if (prev == null || prev.Value.Value == currentKey || Time.time - prev.Value.Key >= StoppingTrashold)
-            {
-                this._body.drag = 5f;
-
-                //this._body.velocity = new Vector2(this._body.velocity.x, 0);
-                this._anim.SetBool("IsRunning", false);
-            }
+            _anim.SetBool(IsRunningState, false);
+            return;
+        }
+        
+        if(Time.time - _lastButtonPress > StoppingTrashold)
+        {
+            _currentVelocity = 0;
+            _anim.SetBool(IsRunningState, false);
         }
 
-        /*CurrentSpeed -= SlowdownSpeed * Time.deltaTime;
-        CurrentSpeed = CurrentSpeed < 0 ? 0 : CurrentSpeed;*/
-
-        if (this._tapQueue.Count > 0 && Time.time - this._tapQueue[this._tapQueue.Count - 1].Key >= StoppingTrashold)
+        if (!Input.GetKeyDown(LeftButton) && !Input.GetKeyDown(RightButton))
         {
-            //this._body.drag = 5f;
-            this._anim.SetBool("IsRunning", false);
+            return;
         }
-
-        if (Input.GetKeyDown(UpButton) && this._isGrounded)
+        
+        _lastButtonPress = Time.time;
+        var currentKeyPressed = Input.GetKeyDown(LeftButton) ? LeftButton : RightButton;
+        
+        if(_previousKeyPressed == currentKeyPressed)
         {
-            Debug.Log("Jumping");
-            //this._body.velocity = new Vector2(this._body.velocity.x, 0);
-            this._body.AddForce(transform.up * JumpingHeight);
-            this._isGrounded = false;
-            this._anim.SetTrigger("JumpTrigger");
+            return;
         }
-
-
-        /*else
-        {
-            this._anim.SetBool("IsRunning", false);
-        }*/
+        
+        _anim.SetBool(IsRunningState, true);
+        _currentVelocity = Math.Min(_maxVelocity, _currentVelocity + _velocityIncrement);
     }
 
     public void OnPlayerGotUp()
