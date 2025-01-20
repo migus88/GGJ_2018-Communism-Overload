@@ -86,7 +86,7 @@ public class GameManager : BaseBehaviour
 
     private float _lastCheatEnterTime = -1;
     private int _lastCharEntered = 0;
-    private readonly KeyCode[] _cheat = new KeyCode[] { KeyCode.Keypad6, KeyCode.Keypad6, KeyCode.Keypad6, KeyCode.Keypad1, KeyCode.Keypad6, KeyCode.Keypad6, KeyCode.Keypad6 };
+    private readonly KeyCode[] _cheat = new KeyCode[] { KeyCode.I, KeyCode.D, KeyCode.D, KeyCode.Q, KeyCode.D };
 
     private void cheat()
     {
