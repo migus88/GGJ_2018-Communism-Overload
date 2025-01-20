@@ -1185,7 +1185,7 @@ PrefabInstance:
     - target: {fileID: 114793014664602522, guid: 7ffba217eee9c9f4eb40057486947db3,
         type: 3}
       propertyPath: _maxVelocity
-      value: 10
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 114793014664602522, guid: 7ffba217eee9c9f4eb40057486947db3,
         type: 3}
@@ -1250,7 +1250,7 @@ PrefabInstance:
     - target: {fileID: 114669571381912580, guid: 410c9704685b31a49bccd5d71390d96a,
         type: 3}
       propertyPath: _maxVelocity
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114669571381912580, guid: 410c9704685b31a49bccd5d71390d96a,
         type: 3}
